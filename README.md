@@ -65,4 +65,4 @@ to improve the project.
 
 ## 开源许可证License
 
-[MIT © Richard McRichface.](../LICENSE)
+[MIT © Richard McRichface.](LICENSE)
