@@ -111,7 +111,7 @@ function changeFunc(index){
     document.getElementById("epidemic-world-map-choose").style.display = "none";
     if(newsMap.size === 0){
        document.getElementById("spinner").style.display = "block";
-       getData("https://lab.isaaclin.cn/nCoV/api/news?num=all&province=%E6%B9%96%E5%8C%97%E7%9C%81",setNewsInfo,1);    
+       getData("https://lab.isaaclin.cn/nCoV/api/news?num=50&province=%E6%B9%96%E5%8C%97%E7%9C%81",setNewsInfo,1);    
     }else{
         document.getElementById("epidemic-news").style.display = "block";
     }
@@ -191,20 +191,16 @@ function closeComplete(){
 }
 
 function setDisInfo(disInfos){
-    this.disInfos = disInfos;
-    setInfo(disInfos,disInfoPages,1);
+    this.disInfos.set(disInfoPages, disInfos);
+    setInfo(disInfos,1);
 }
 
 function setTrueInfo(trueInfos){
-    this.trueInfos = trueInfos;
-    if(this.trueInfos.length === 0){
-       getData("https://lab.isaaclin.cn/nCoV/api/rumors?num=all&rumorType=1",setTrueInfo,1);
-       return ;
-    }
-    setInfo(trueInfos,trueInfoPages,2);
+    this.trueInfos.set(trueInfoPages, trueInfos);
+    setInfo(trueInfos,2);
 }
 
-function setInfo(infos,page,type){
+function setInfo(infos,type){
     var infoContentul = document.getElementById("info-content").getElementsByTagName("ul").item(0);
     
     var old = infoContentul.getElementsByTagName("li");
@@ -212,8 +208,7 @@ function setInfo(infos,page,type){
         infoContentul.removeChild(old[i]);
     }
     
-    var sphere = calDataSphere(page,type,infos.length);
-    for(i=sphere[0];i<=sphere[1];i++){
+    for(i=0;i<infos.length;i++){
         var li = document.createElement("li");
         var div = document.createElement("div");
         div.setAttribute("class","info-content-container");
@@ -289,6 +284,9 @@ function setPageShow(type, otherInfo){
        infos = otherInfo;
     }
     var totalPages = infos.length % 8 == 0 ? infos.length / 8 : parseInt(infos.length / 8)+1; 
+    if(type <= 2){
+       totalPages = type===1?disInfoTotalPage:trueInfoTotalPage;
+    }
     var last = (type==1||type==2)?document.getElementById("info-page-last"):document.getElementById("find-page-last");
     var next = (type==1||type==2)?document.getElementById("info-page-next"):document.getElementById("find-page-next");
     
@@ -309,14 +307,22 @@ function setPageShow(type, otherInfo){
     }
 }
 
-function toDisInfo(){
-    disInfoPages = 1;
-    setDisInfo(disInfos);
+function toDisInfo(pages){
+    disInfoPages = pages;
+    if(disInfos.has(disInfoPages)){
+        setDisInfo(disInfos.get(disInfoPages));   
+        return ;
+    }
+    getData("https://lab.isaaclin.cn/nCoV/api/rumors?page="+pages+"&num=8",setDisInfo,1);
 }
 
-function toTrueInfo(){
-    trueInfoPages = 1;
-    setTrueInfo(trueInfos);
+function toTrueInfo(pages){
+    trueInfoPages = pages;
+    if(trueInfos.has(trueInfoPages)){
+        setTrueInfo(trueInfos.get(trueInfoPages));   
+        return ;
+    }
+    getData("https://lab.isaaclin.cn/nCoV/api/rumors?page="+pages+"&num=8&rumorType=1",setTrueInfo,1);
 }
 
 function togglePage(situation){
@@ -324,10 +330,10 @@ function togglePage(situation){
     var incre = (situation==1)?1:-1;
     if(type === 1){
         disInfoPages += incre;
-        setDisInfo(disInfos);
+        toDisInfo(disInfoPages);
     }else{
         trueInfoPages += incre;  
-        setTrueInfo(trueInfos);
+        toTrueInfo(trueInfoPages);
     }
     setPageShow(type,null);
 }
@@ -504,7 +510,7 @@ function changeNewsProvince(provinceName){
     if(newsMap.has(provinceName)){
        setNewsInfo(newsMap.get(provinceName));
     }else{
-        getData("https://lab.isaaclin.cn/nCoV/api/news?num=all&province="+provinceName,setNewsInfo,1);
+        getData("https://lab.isaaclin.cn/nCoV/api/news?num=50&province="+provinceName,setNewsInfo,1);
     }
     dropbtn.innerHTML = provinceName;
 }
@@ -525,7 +531,7 @@ function setAllProvince(){
 
 window.onload = function(){
     getData("http://www.tianqiapi.com/api?version=epidemic&appid=51942884&appsecret=c1WDHJLd",showEpidemicHotMap,2);
-    getData("https://lab.isaaclin.cn/nCoV/api/rumors?num=all",setDisInfo,1);
+    getData("https://lab.isaaclin.cn/nCoV/api/rumors?page=1&num=8",setDisInfo,1);
     getData("http://2019ncov.nosugartech.com/data.json?439809",setSearchInfo,2);
     setBottomSlogan();
     showEpidemicInfo();

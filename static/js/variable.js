@@ -1,8 +1,10 @@
 var donationIndex = 1;
-var disInfos = [];
-var trueInfos = [];
+var disInfos = new Map();
+var trueInfos = new Map();
 var disInfoPages = 1;
 var trueInfoPages = 1;
+var disInfoTotalPage = 19;
+var trueInfoTotalPage = 2;
 var bottomSlogan = [
     "把人民群众生命安全和身体健康放在第一位。",
     "抗击肺炎，众志成城",
