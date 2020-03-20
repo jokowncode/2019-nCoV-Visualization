@@ -1,0 +1,23 @@
+Country/Region,Cumulative number of case(s),Number of new cases since last WHO update,Number of deaths,Number recovered,Local chain(s) of transmission
+Brazil,2,0,0,0,None
+Canada,101,3,10,26,Yes
+China,1309,0,58,1037,Yes
+"China, Hong Kong Special Administrative Region 4",1108,49,35,215,Yes
+"China, Taiwan",23,2,0,7,Yes
+France,5,0,0,1,None
+Germany,6,0,0,4,None
+Italy,3,0,0,2,None
+Japan,4,0,0,0,None
+Kuwait,1,0,0,0,None
+Malaysia,4,0,1,0,None
+Republic of Ireland,1,0,0,1,None
+Romania,1,0,0,NaN,None
+Singapore,147,14,9,77,Yes
+South Africa,1,0,0,0,None
+Spain,1,0,0,0,None
+Switzerland,1,0,0,1,None
+Thailand,8,1,2,5,None
+United Kingdom,6,1,0,3,Yes
+United States,166,0,0,NaN,Yes
+Viet Nam 5,62,0,4,46,Yes
+Total,2960,70,119,1425,

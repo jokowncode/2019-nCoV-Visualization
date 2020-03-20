@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Epidemic Visualization</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/index.css" />
+    <link rel="stylesheet" type="text/css" href="../static/css/timeline.css"/>
+    <script src="../static/jquery/jquery-3.3.1.min.js"></script>
+    <script src="../static/js/variable.js"></script>
+    <script src="../static/js/timeline.js"></script>
+    <script src="../static/js/echartMap.js"></script>
+    <script src="../static/js/index.js"></script>
+    <script src="../static/echarts/echarts.js"></script>
+    <script src="../static/echarts/china.js"></script>
+    <script src="../static/echarts/world.js"></script>
+</head>
+<body>
+    <div class="top">
+        <br/>
+        <div class="slogan">
+            <br/><br/>
+            <div class="slogan-content" align="center">
+                <span style="color: red;">共渡难关</span>
+                <span style="color: white;">抗击疫情</span>
+            </div>
+        </div>
+        <div class="epidemic-info" align="center" style="height: 49%; background-color: aliceblue;">
+            <br/>
+            <div style="position: absolute;left: 25%;font-weight: bold;font-size: 16px;">全国疫情概况：</div>
+            <div id="epidemic-info-data-incre" style="margin-top: -13px; font-size: 10px; color: grey;">
+                <span style="color: blueviolet;margin: 33px;"></span>
+                <span style="color: firebrick;margin: 33px;"></span>
+                <span style="color: cadetblue;margin: 33px;"></span>
+                <span style="color: blue;margin: 33px;"></span>
+                <span style="color: dimgray;margin: 33px;"></span>
+                <span style="color: coral;margin: 33px;"></span>
+            </div>
+            <div id="epidemic-info-data">
+                <span class="epidemic-info-data" style="color: blueviolet"></span>
+                <span class="epidemic-info-data" style="color: firebrick"></span>
+                <span class="epidemic-info-data" style="color: cadetblue"></span>
+                <span class="epidemic-info-data" style="color: blue"></span>
+                <span class="epidemic-info-data" style="color: dimgray"></span>
+                <span class="epidemic-info-data" style="color: coral"></span>
+            </div>
+            <div>
+                <span class="epidemic-info-title">现存确诊</span>
+                <span class="epidemic-info-title">累计确诊</span>
+                <span class="epidemic-info-title">现存疑似</span>
+                <span class="epidemic-info-title">现存重症</span>
+                <span class="epidemic-info-title">累计死亡</span>
+                <span class="epidemic-info-title">累计治愈</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="left">
+        <div class="left-link">
+            <div style="margin: 25px;"><a class="link" href="javascript:changeFunc(0);">国 内 疫 情</a></div>
+            <div style="margin: 25px;"><a class="link" href="javascript:changeFunc(1);">国 外 疫 情</a></div>
+            <div style="margin: 25px;"><a class="link" href="javascript:changeFunc(2);">数 据 整 理</a></div>
+            <div style="margin: 25px;"><a class="link" href="javascript:changeFunc(3);">迁 移 轨 迹</a></div>
+            <div style="margin: 25px;"><a class="link" href="javascript:changeFunc(4);">同 行 查 询</a></div>
+            <div style="margin: 25px;"><a class="link" href="javascript:changeFunc(5);">辟 谣 防 护</a></div>
+            <div style="margin: 25px;"><a class="link" href="javascript:changeFunc(7);">实 时 播 报</a></div>
+            <div style="margin: 25px;"><a class="link" href="javascript:changeFunc(6);">捐 赠 信 息</a></div>
+        </div>
+    </div>
+    
+    <div class="bottom">
+        <div id="bottom-slogan" align="center" style="font-size: 17px;margin-top: 3px;color:chocolate;font-weight: 500;"></div>
+    </div>
+    
+    <div class="claro">
+        <div class="spinner" id="spinner" style="display: none;">
+          <div class="rect1"></div>
+          <div class="rect2"></div>
+          <div class="rect3"></div>
+          <div class="rect4"></div>
+          <div class="rect5"></div>
+        </div>
+        <div class="right" id="epidemic-news" style="display: none">
+            <section class="section intro">
+              <div class="container">
+                <h1>实 时 播 报 &rarr;</h1>
+                <div class="dropdown">
+                  <button onclick="myFunction();" id="dropbtn" class="dropbtn">湖北省</button>
+                  <div id="myDropdown" class="dropdown-content" style="overflow: auto;height:200px;">
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="timeline">
+              <ol id="timeline-ol">
+                  <li></li>
+              </ol>
+
+              <div class="arrows">
+                <button class="arrow darrow__prev disabled" disabled>
+                  <img src="../static/pic/dleft.png" alt="prev timeline arrow">
+                </button>
+                <button class="arrow arrow__prev disabled" disabled>
+                  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/arrow_prev.svg" alt="prev timeline arrow">
+                </button>
+                <button class="arrow arrow__next">
+                  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/arrow_next.svg" alt="next timeline arrow">
+                </button>
+                <button class="arrow darrow__next" disabled>
+                  <img src="../static/pic/dright.png" alt="prev timeline arrow">
+                </button>
+              </div>
+            </section>
+        </div>
+        <div class="right" id="epidemic-moveout-map" style="display: none"></div>
+        <div id="epidemic-moveout-map-info" style="display:none">
+            <div style="margin:20px 20px 20px 35px;">
+                时间：<input onchange="changeMoveOutDate();" id="moveout-input" class="moveout-input" type="date" min="2020-01-23" value=""/>
+                <select onchange="changeMoveWay();" style="margin-left: 20px" id="move-in-out-select">
+                    <option>迁出</option>
+                    <option>迁入</option>
+                </select>
+            </div>
+            <div style="margin-left: 20px;">
+                <h2 id="move-title" align="center">湖北迁出目的地</h2>
+            </div>
+            <div style="margin-left: 10px;margin-right: 10px;overflow: auto;">
+                <ul style="margin-top: 5px;">
+                    <table style="width: 100%;" id="moveout-info-table">
+                        <tr>
+                            <th>名称</th>
+                            <th>比例</th>
+                        </tr>
+                    </table>
+                </ul>
+                <div id="moveout-no-data" align="center" style="color: red;font-weight: bold;font-size: 20px;display: none">暂无数据</div>
+            </div>
+        </div>
+        <div class="right" id="epidemic-world-map" style="display:none"></div>
+        <div id="epidemic-incre-accu-sort" style="display: none;"></div>
+        <div class="right" id="epidemic-data-sort" style="display: none;"></div>
+        <div class="right" id="epidemic-hot-map"></div>
+        <div id="epidemic-info">
+           <button class="epidemic-info-button">相关信息</button>
+           <div id="epidemic-general-info" class="epidemic-general-info">
+               <div>新型冠状肺炎病毒</div>
+               <div></div>
+               <div></div>
+               <div></div>
+               <div></div> 
+               <div></div>
+               <div></div>
+           </div>
+        </div>
+        <div id="epidemic-hot-map-choose">
+            <select id="choose-select" onchange="changeEpidemicHotMapChoose();">
+                <option>现存确诊</option>
+                <option>累计确诊</option>
+                <option>现存疑似</option>
+                <option>累计治愈</option>
+                <option>累计死亡</option>
+            </select>
+        </div>
+        <div id="epidemic-world-map-choose" style="display: none;">
+            <select id="world-choose-select" onchange="changeEpidemicWorldMapChoose();">
+                <option>现存确诊</option>
+                <option>累计确诊</option>
+                <option>现存疑似</option>
+                <option>累计治愈</option>
+                <option>累计死亡</option>
+            </select>
+        </div>
+        <div id="mapMerge" style="display:none"></div>
+        <div id="city-info" style="display:none"></div>
+        <img style="display:none" id="city-info-close" class="city-info-close" src="../static/pic/close.png" onclick="closeCityInfo();"/>
+        <div class="right" id="donation" style="display: none;">
+            <a href="javascript:donationChange(0);"><img alt="无法显示" src="../static/pic/left.png" style="width: 40px;height:40px;position: absolute;left:15%;top:50%; "/></a>
+            <img id="donation-img" src="../static/pic/donation/1.jpg" alt="无法显示"/>
+            <a href="javascript:donationChange(1);"><img alt="无法显示" src="../static/pic/right.png" style="width: 40px;height:40px;position: absolute;top: 50%;right:18%;"/></a>
+        </div>
+        <div class="right" id="disinfo" style="display: none;">
+            <div style="margin-left: 10px;">
+                <a href="javascript:toDisInfo();"><button class="info-choose" style="background-color: red;box-shadow: 3px 3px 3px #ff7675;">谣 言</button></a>
+                <a href="javascript:toTrueInfo();"><button class="info-choose" style="background-color: #00cec9;box-shadow: 3px 3px 3px #81ecec;">可 信</button></a>
+            </div>
+            <div id="info-content" class="info-content">
+                <ul>
+                    <li><div class="info-content-load">Loading....</div></li>
+                </ul>
+            </div>
+            <div id="info-page" class="info-page" style="display: none">
+                <a href="javascript:togglePage(0);" id="info-page-last" class="info-page-toggle">上一页</a>
+                <a href="javascript:togglePage(1);" id="info-page-next" class="info-page-toggle">下一页</a>
+            </div>
+            
+            <div class="merge" id="merge" style="display: none;"></div>
+                
+            <div id="info-complete" style="display: none;" class="info-complete">
+                <img onclick="javascript:closeComplete();" id="info-complete-close" src="../static/pic/close.png"/>
+                <div id="info-complete-title"></div>
+                <div id="info-complete-content"> </div>
+                <img src="" id="info-complete-pic"/>
+            </div>
+        </div>
+        
+        <div class="right" id="search" style="display: none;">
+            <div class="search-find">
+                <div class="find-container up">
+                    日期：<input class="find-input" type="date" id="find-date"/>
+                    车次/车牌/航班/场所名：<input class="find-input" type="text" style="width: 120px;" id="find-serial"/>
+                </div>
+                <div class="find-container down">
+                    起点：<input class="find-input" type="text" id="find-start"/>
+                    终点：<input class="find-input" type="text" id="find-end"/>
+                </div>
+                <button onclick="detailFind();" class="find-button">查 询</button>
+                <button class="find-button reset" onclick="searchReset();">重 置</button>
+            </div>
+            <div class="find-traffic">
+                <ul>
+                    <li onclick="changeSearchTraffic(0);">全部</li>
+                    <li onclick="changeSearchTraffic(1);">飞机</li>
+                    <li onclick="changeSearchTraffic(2);">火车</li>
+                    <li onclick="changeSearchTraffic(3);">地铁</li>
+                    <li onclick="changeSearchTraffic(4);">长途客车/巴士</li>
+                    <li onclick="changeSearchTraffic(5);">公交车</li>
+                    <li onclick="changeSearchTraffic(6);">出租车</li>
+                    <li onclick="changeSearchTraffic(7);">轮船</li>
+                    <li onclick="changeSearchTraffic(8);">其他公共场所</li>
+                </ul>
+            </div>
+            <div class="find-content">
+                <table id="find-table" class="find-content-table" border="2" cellpadding="0px" cellspacing="0px">
+                    <tr style="background-color: #82ccdd;height: 45px;">
+                        <th>日期</th>
+                        <th>车次/车牌/航班/场所名</th>
+                        <th>出行类型</th>
+                        <th>起点</th>
+                        <th>终点</th>
+                        <th>车厢</th>
+                        <th>描述</th>
+                    </tr>
+                </table>
+            </div>
+            <div id="find-content-page" class="find-content-page" name="0">
+                <a href="javascript:toggleFindPage(0);" id="find-page-last" class="find-page-toggle">上一页</a>
+                <a href="javascript:toggleFindPage(1);" id="find-page-next" class="find-page-toggle">下一页</a>
+            </div>
+            <div id="find-tip" style="color: red;font-size: 20px;margin-left: 20px;display: none;">
+                暂无官方新闻提及该行程或地点存在确诊病例！
+            </div>
+        </div>
+    </div>
+</body>
+</html>

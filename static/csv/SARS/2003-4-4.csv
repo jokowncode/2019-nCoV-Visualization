@@ -1,0 +1,21 @@
+Country/Region,Total number of case(s),Number of deaths,Local transmission
+Australia,1,0,None
+Belgium,1,0,None
+Brazil,1,0,None
+Canada,69,7,Yes
+China,1220,49,Yes
+"China, Hong Kong Special Administrative Region",761,17,Yes
+"China, Taiwan",15,0,Yes
+France,3,0,None
+Germany,5,0,None
+Italy,3,0,None
+Republic of Ireland,1,0,None
+Romania,1,0,None
+Singapore,100,5,Yes
+Spain,1,0,None
+Switzerland,2,0,None
+Thailand,7,2,None
+United Kingdom,3,0,None
+United States,100,0,Being determined
+Viet Nam,59,4,Yes
+Total,2353,84,
