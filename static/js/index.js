@@ -95,9 +95,10 @@ function changeFunc(index){
        document.getElementById("epidemic-world-map-choose").style.display = "none";
        if(moveOutInfoMap.size === 0){
            document.getElementById("spinner").style.display = "block";
-           var dates = getAndSetDateSphere();
-           date = dates[0]+""+dates[1]+""+dates[2];
-           getData("http://huiyan.baidu.com/migration/provincerank.jsonp?dt=province&id=420000&type=move_out&date="+date,setMoveoutMap,3);
+//           var dates = getAndSetDateSphere();
+//           alert(dates);
+//           date = dates[0]+""+dates[1]+""+dates[2];
+           getData("http://huiyan.baidu.com/migration/provincerank.jsonp?dt=province&id=420000&type=move_out&date=20200315",setMoveoutMap,3);
        }else{
            document.getElementById("epidemic-moveout-map-info").style.display = "block";
        }
@@ -118,12 +119,12 @@ function changeFunc(index){
 }
 
 function Mill2Date(mills){
-    var date = new Date(mills);
+    var date = new Date();
+    date.setTime(mills);
     var month = (date.getMonth()+1+"").length==1?"0"+(date.getMonth()+1) : date.getMonth()+1;
     var day = (date.getDate()+"").length == 1?"0"+date.getDate():date.getDate();
     var hour = (date.getHours()+"").length == 1?"0"+date.getHours():date.getHours();
     var minute = (date.getMinutes()+"").length == 1?"0"+date.getMinutes():date.getMinutes();
-    
     return [month,day,hour,minute];
 }
 
@@ -143,7 +144,6 @@ function setNewsInfo(newsInfos){
         var li = document.createElement("li");
         var div = document.createElement("div");
         var date = Mill2Date(newsInfos[i].pubDate);
-    
         li.title = "信息来源:"+newsInfos[i].infoSource+"\n"+newsInfos[i].title;
         div.innerHTML = "<a target='_blank' id='timeline-a' href='"+newsInfos[i].sourceUrl+"'><time>"+(date[0]+"-"+date[1]+" "+date[2]+":"+date[3])+"</time></a>"+newsInfos[i].summary;
         li.appendChild(div);
